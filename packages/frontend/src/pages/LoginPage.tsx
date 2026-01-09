@@ -85,15 +85,8 @@ export const LoginPage: React.FC = () => {
             </Typography>
             <Box sx={{ fontSize: '0.85rem', lineHeight: 1.8 }}>
               <div><strong>Admin:</strong> admin@clinic.com / admin123</div>
-              <div><strong>Doctor:</strong> dr.ahmed@clinic.com / doctor123</div>
-              <div><strong>Secretary:</strong> secretary@clinic.com / secretary123</div>
-              <div style={{ marginTop: '8px', borderTop: '1px solid rgba(0,0,0,0.1)', paddingTop: '8px' }}>
-                <strong>Patients:</strong>
-              </div>
-              <div>• patient@clinic.com / patient123</div>
-              <div>• sarah@clinic.com / patient123</div>
-              <div>• michael@clinic.com / patient123</div>
-            </Box>
+             
+        </Box>
           </Alert>
 
           {/* Login Form */}
