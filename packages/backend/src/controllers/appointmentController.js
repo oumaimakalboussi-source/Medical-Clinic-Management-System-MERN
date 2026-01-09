@@ -85,7 +85,8 @@ export const getAppointmentById = asyncHandler(async (req, res) => {
 });
 
 export const createAppointment = asyncHandler(async (req, res) => {
-  const { patientId, doctorId, dateTime, reason, status = 'pending', notes } = req.body;
+  const { patientId, doctorId, dateTime, reason, status, notes } = req.body;
+  const requestingUser = req.user; // From auth middleware
 
   // Validation
   if (!patientId || !doctorId || !dateTime) {
@@ -93,6 +94,25 @@ export const createAppointment = asyncHandler(async (req, res) => {
       success: false,
       message: 'PatientId, doctorId, and dateTime are required',
     });
+  }
+
+  // If patient role: enforce restrictions
+  if (requestingUser.role === 'patient') {
+    // Patient can only book for themselves (via their associated patient ID)
+    const patientUser = await Patient.findOne({ userId: requestingUser._id });
+    if (!patientUser || patientUser._id.toString() !== patientId) {
+      return res.status(403).json({
+        success: false,
+        message: 'Patients can only book appointments for themselves',
+      });
+    }
+    // Enforce status is always 'pending' for patient-created appointments
+    if (status && status !== 'pending') {
+      return res.status(400).json({
+        success: false,
+        message: 'Patient appointments must have status "pending"',
+      });
+    }
   }
 
   // Verify patient and doctor exist
@@ -108,12 +128,15 @@ export const createAppointment = asyncHandler(async (req, res) => {
     });
   }
 
+  // Determine status: patient appointments always 'pending', others can override
+  const appointmentStatus = requestingUser.role === 'patient' ? 'pending' : (status || 'pending');
+
   const appointment = await Appointment.create({
     patientId,
     doctorId,
     dateTime,
     reason,
-    status,
+    status: appointmentStatus,
     notes,
   });
 
@@ -142,6 +165,15 @@ export const createAppointment = asyncHandler(async (req, res) => {
 
 export const updateAppointment = asyncHandler(async (req, res) => {
   const { patientId, doctorId, dateTime, reason, status, notes } = req.body;
+  const requestingUser = req.user; // From auth middleware
+
+  // If patient role: prevent modifications
+  if (requestingUser.role === 'patient') {
+    return res.status(403).json({
+      success: false,
+      message: 'Patients cannot modify appointments. Please contact support.',
+    });
+  }
 
   const updateData = { patientId, doctorId, dateTime, reason, status, notes };
 
@@ -182,6 +214,16 @@ export const updateAppointment = asyncHandler(async (req, res) => {
 });
 
 export const deleteAppointment = asyncHandler(async (req, res) => {
+  const requestingUser = req.user; // From auth middleware
+
+  // Patients cannot delete appointments
+  if (requestingUser.role === 'patient') {
+    return res.status(403).json({
+      success: false,
+      message: 'Patients cannot delete appointments',
+    });
+  }
+
   const appointment = await Appointment.findByIdAndDelete(req.params.id);
 
   if (!appointment) {
