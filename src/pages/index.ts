@@ -1,0 +1,8 @@
+export { LoginPage } from './LoginPage'
+export { DashboardPage } from './DashboardPage'
+export { AppointmentsPage } from './AppointmentsPage'
+export { PatientsPage } from './PatientsPage'
+export { ConsultationsPage } from './ConsultationsPage'
+export { PrescriptionsPage } from './PrescriptionsPage'
+export { UsersPage } from './UsersPage'
+export { ProfilePage } from './ProfilePage'
