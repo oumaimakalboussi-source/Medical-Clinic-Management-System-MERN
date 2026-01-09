@@ -1,0 +1,10 @@
+# Backend TypeScript Configuration (Node.js)
+
+This is a placeholder if backend TypeScript support is added in the future.
+Currently, the backend uses JavaScript (src/**/*.js).
+
+To enable TypeScript in backend:
+1. Install: `npm install -D typescript @types/node` (in packages/backend)
+2. Rename `src/**/*.js` to `src/**/*.ts`
+3. Add this tsconfig.json in packages/backend/
+4. Update scripts in packages/backend/package.json

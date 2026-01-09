@@ -1,4 +1,4 @@
-# Clinic Management System - Frontend
+# Clinic Management System Monorepo
 
 A professional medical clinic management web application built with React.js, featuring appointment scheduling, patient management, consultations, and prescription handling.
 
@@ -38,7 +38,7 @@ A professional medical clinic management web application built with React.js, fe
 - **Recharts**: Data visualization
 - **Context API**: Global state management
 
-## 📦 Installation
+## 📦 Monorepo Structure
 
 ### Prerequisites
 - Node.js (v16 or higher)
@@ -65,11 +65,12 @@ A professional medical clinic management web application built with React.js, fe
    VITE_API_URL=http://localhost:5000/api
    ```
 
-4. **Start development server**
+4. **Start development servers**
    ```bash
    npm run dev
    ```
-   The application will be available at `http://localhost:5173`
+   - Backend: http://localhost:5000/api
+   - Frontend: http://localhost:5173
 
 ## 🚀 Building for Production
 
@@ -78,36 +79,33 @@ npm run build
 npm run preview
 ```
 
-## 📁 Project Structure
+## 🧱 Architecture
 
 ```
-src/
-├── components/
-│   ├── forms/              # Reusable form components
-│   │   ├── FormTextField.tsx
-│   │   └── FormSelect.tsx
-│   ├── DataTable.tsx       # Reusable data table with pagination
-│   ├── Layout.tsx          # Main layout with navigation
-│   ├── ProtectedRoute.tsx  # Route protection wrapper
-│   └── NotificationContainer.tsx
-├── context/
-│   ├── AuthContext.tsx     # Authentication context
-│   └── NotificationContext.tsx
-├── pages/
-│   ├── LoginPage.tsx
-│   ├── DashboardPage.tsx
-│   ├── AppointmentsPage.tsx
-│   ├── PatientsPage.tsx
-│   ├── ConsultationsPage.tsx
-│   ├── PrescriptionsPage.tsx
-│   ├── UsersPage.tsx
-│   └── ProfilePage.tsx
-├── services/
-│   └── apiService.ts       # API client with interceptors
-├── App.tsx                 # Main app component
-├── main.tsx                # Entry point
-└── index.css
+packages/
+├── frontend/             # React + Vite app (TypeScript)
+│   ├── index.html
+│   ├── src/
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── vite.config.ts
+└── backend/              # Node.js + Express API (MongoDB)
+    ├── src/
+    │   ├── application/  # Use-cases (services)
+    │   ├── domain/       # Domain models (optional future)
+    │   ├── infrastructure/
+    │   │   └── repositories/
+    │   ├── controllers/
+    │   ├── routes/
+    │   ├── middleware/
+    │   ├── models/
+    │   └── config/
+    ├── scripts/
+    └── package.json
 ```
+
+## 📦 Installation
+Note: The frontend app is now isolated under `frontend/` to better separate concerns from the backend code.
 
 ## 🔐 Authentication
 
