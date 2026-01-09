@@ -30,6 +30,7 @@ import {
   ExpandMore as ExpandMoreIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../context/AuthContext';
+import logo from '@/assets/medical-logo.png';
 
 /**
  * Layout Component
@@ -141,10 +142,10 @@ export const Layout: React.FC = () => {
             }}
             onClick={() => navigate('/dashboard')}
           >
-            <img 
-              src="https://via.placeholder.com/40?text=Medical"
-              alt="Medical Logo" 
-              style={{ width: '40px', height: '40px', marginRight: '12px' }}
+            <img
+              src={logo}
+              alt="Medical Logo"
+              style={{ width: '40px', height: '40px', marginRight: '12px', objectFit: 'contain' }}
             />
             <Box
               sx={{
