@@ -1,5 +1,6 @@
 export { Layout } from './Layout'
 export { ProtectedRoute } from './ProtectedRoute'
+export { RoleBasedRedirect } from './RoleBasedRedirect'
 export { NotificationContainer } from './NotificationContainer'
 export { DataTable } from './DataTable'
 export type { Column } from './DataTable'

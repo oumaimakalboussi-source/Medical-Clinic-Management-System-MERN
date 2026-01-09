@@ -6,6 +6,7 @@ import {
   updatePatient,
   deletePatient,
   searchPatients,
+  getCurrentPatient,
 } from '../controllers/patientController.js';
 import { authenticate, authorize } from '../middleware/auth.js';
 
@@ -18,6 +19,9 @@ const router = express.Router();
  */
 
 router.use(authenticate);
+
+// Get current patient's profile (authenticated patient only)
+router.get('/me', getCurrentPatient);
 
 // Public read routes (for authenticated users)
 router.get('/', getAllPatients);

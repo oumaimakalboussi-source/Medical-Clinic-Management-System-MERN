@@ -14,7 +14,7 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requiredRoles }) => {
-  const { isAuthenticated, isLoading, hasRole } = useAuth();
+  const { isAuthenticated, isLoading, hasRole, user } = useAuth();
 
   if (isLoading) {
     return (
@@ -29,7 +29,9 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requir
   }
 
   if (requiredRoles && requiredRoles.length > 0 && !hasRole(requiredRoles)) {
-    return <Navigate to="/dashboard" replace />;
+    // Redirect patients to appointments, others to dashboard
+    const redirectPath = user?.role === 'patient' ? '/appointments' : '/dashboard';
+    return <Navigate to={redirectPath} replace />;
   }
 
   return <>{children}</>;

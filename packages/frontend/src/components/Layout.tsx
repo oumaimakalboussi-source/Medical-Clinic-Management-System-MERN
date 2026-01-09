@@ -63,7 +63,7 @@ export const Layout: React.FC = () => {
       label: 'Dashboard',
       icon: <DashboardIcon />,
       path: '/dashboard',
-      roles: ['admin', 'doctor', 'patient', 'secretary'],
+      roles: ['admin', 'doctor', 'secretary'],
     },
     {
       label: 'Patients',
@@ -140,7 +140,7 @@ export const Layout: React.FC = () => {
               cursor: 'pointer',
               flex: 1,
             }}
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate(hasRole('patient') ? '/appointments' : '/dashboard')}
           >
             <img
               src={logo}

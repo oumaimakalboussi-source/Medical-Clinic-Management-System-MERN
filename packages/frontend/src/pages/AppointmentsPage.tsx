@@ -155,23 +155,23 @@ export const AppointmentsPage: React.FC = () => {
 
       // Fetch current patient profile for patient role
       if (isPatient && user) {
-        const patientRes = await patientService.getAllPatients({ limit: 1000 });
-        const patientList = patientRes.data?.data || patientRes.data || [];
-        
-        // Try to find by email first, then by name
-        let currentPatient = patientList.find((p: Patient) => p.email === user.email);
-        
-        if (!currentPatient) {
-          currentPatient = patientList.find(
-            (p: Patient) => p.prenom === user.prenom && p.nom === user.nom
-          );
-        }
-        
-        if (currentPatient) {
-          setPatientData(currentPatient);
-        } else {
+        try {
+          // Use dedicated /patients/me endpoint for current patient
+          const patientRes = await patientService.getCurrentPatient();
+          const currentPatient = patientRes.data?.data || patientRes.data;
+          
+          if (currentPatient) {
+            setPatientData(currentPatient);
+          } else {
+            addNotification(
+              'Patient profile not found. Please contact clinic support.',
+              'error'
+            );
+          }
+        } catch (err: any) {
+          console.error('Failed to fetch patient profile:', err);
           addNotification(
-            'Patient profile not found. Please contact clinic support.',
+            err.response?.data?.message || 'Failed to load your patient profile.',
             'error'
           );
         }
