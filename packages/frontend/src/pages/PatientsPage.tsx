@@ -160,7 +160,7 @@ export const PatientsPage: React.FC = () => {
       key: 'sexe',
       label: 'Gender',
       sortable: true,
-      render: (value) => value.charAt(0).toUpperCase() + value.slice(1),
+      render: (value) => value ? value.charAt(0).toUpperCase() + value.slice(1) : 'N/A',
     },
     {
       key: 'id',
