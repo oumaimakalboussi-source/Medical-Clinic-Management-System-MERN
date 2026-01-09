@@ -102,7 +102,7 @@ export const refreshToken = asyncHandler(async (req, res) => {
 });
 
 export const register = asyncHandler(async (req, res) => {
-  const { email, password, nom, prenom, role = 'patient' } = req.body;
+  const { email, password, nom, prenom, role = 'patient', telephone } = req.body;
 
   // Validation
   if (!email || !password || !nom || !prenom) {
@@ -135,6 +135,7 @@ export const register = asyncHandler(async (req, res) => {
     nom,
     prenom,
     role,
+    telephone,
     status: 'active',
   });
 
@@ -145,6 +146,7 @@ export const register = asyncHandler(async (req, res) => {
       email: user.email,
       nom: user.nom,
       prenom: user.prenom,
+      telephone,
     });
   } else if (role === 'doctor') {
     await Doctor.create({
@@ -152,6 +154,7 @@ export const register = asyncHandler(async (req, res) => {
       email: user.email,
       nom: user.nom,
       prenom: user.prenom,
+      telephone,
     });
   } else if (role === 'secretary') {
     await Secretary.create({
@@ -159,6 +162,7 @@ export const register = asyncHandler(async (req, res) => {
       email: user.email,
       nom: user.nom,
       prenom: user.prenom,
+      telephone,
     });
   }
 

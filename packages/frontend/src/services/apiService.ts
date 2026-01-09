@@ -50,6 +50,10 @@ export const authService = {
     const response = await apiClient.post('/auth/login', { email, password });
     return response.data;
   },
+  register: async (data: { email: string; password: string; nom: string; prenom: string; role: 'doctor' | 'patient' | 'secretary'; telephone?: string }) => {
+    const response = await apiClient.post('/auth/register', data);
+    return response.data;
+  },
   logout: () => {
     localStorage.removeItem('authToken');
     localStorage.removeItem('user');

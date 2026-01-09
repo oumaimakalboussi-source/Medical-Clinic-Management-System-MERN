@@ -8,6 +8,7 @@ import { Layout } from './components/Layout';
 
 // Pages
 import { LoginPage } from './pages/LoginPage';
+import { SignupPage } from './pages/SignupPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { AppointmentsPage } from './pages/AppointmentsPage';
 import { PatientsPage } from './pages/PatientsPage';
@@ -119,6 +120,7 @@ function App() {
             <Routes>
               {/* Public Routes */}
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/signup" element={<SignupPage />} />
 
               {/* Protected Routes */}
               <Route

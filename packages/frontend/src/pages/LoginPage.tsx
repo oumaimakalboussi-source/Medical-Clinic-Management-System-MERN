@@ -127,6 +127,18 @@ export const LoginPage: React.FC = () => {
             >
               {isLoading ? <CircularProgress size={24} /> : 'Login'}
             </Button>
+
+            <Button
+              fullWidth
+              variant="outlined"
+              color="primary"
+              size="medium"
+              sx={{ mb: 1 }}
+              onClick={() => navigate('/signup')}
+              disabled={isLoading}
+            >
+              Create Account
+            </Button>
           </form>
         </Card>
       </Box>
