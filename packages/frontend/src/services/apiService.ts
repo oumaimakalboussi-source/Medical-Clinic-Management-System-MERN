@@ -110,6 +110,10 @@ export const patientService = {
     const response = await apiClient.delete(`/patients/${id}`);
     return response.data;
   },
+  getCurrentPatient: async () => {
+    const response = await apiClient.get('/patients/me');
+    return response.data;
+  },
   searchPatients: async (query: string) => {
     const response = await apiClient.get('/patients/search', {
       params: { q: query },

@@ -1,5 +1,6 @@
 import { asyncHandler } from '../utils/helpers.js';
 import { patientService } from '../application/services/patientService.js';
+import Patient from '../models/Patient.js';
 
 /**
  * Patient Controller
@@ -45,4 +46,32 @@ export const searchPatients = asyncHandler(async (req, res) => {
   const { q = '' } = req.query;
   const patients = await patientService.search(q);
   res.status(200).json({ success: true, message: 'Search results', data: patients });
+});
+
+export const getCurrentPatient = asyncHandler(async (req, res) => {
+  const requestingUser = req.user; // From auth middleware
+
+  // Only allow patients to access their own profile
+  if (requestingUser.role !== 'patient') {
+    return res.status(403).json({
+      success: false,
+      message: 'This endpoint is for patients only',
+    });
+  }
+
+  // Find patient record by userId
+  const patient = await Patient.findOne({ userId: requestingUser._id });
+
+  if (!patient) {
+    return res.status(404).json({
+      success: false,
+      message: 'Patient profile not found',
+    });
+  }
+
+  res.status(200).json({
+    success: true,
+    message: 'Patient profile retrieved successfully',
+    data: patient,
+  });
 });

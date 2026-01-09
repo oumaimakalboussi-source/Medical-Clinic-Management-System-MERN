@@ -16,6 +16,7 @@ import { ConsultationsPage } from './pages/ConsultationsPage';
 import { PrescriptionsPage } from './pages/PrescriptionsPage';
 import { UsersPage } from './pages/UsersPage';
 import { ProfilePage } from './pages/ProfilePage';
+import { RoleBasedRedirect } from './components/RoleBasedRedirect';
 
 /**
  * Main App Component
@@ -131,9 +132,16 @@ function App() {
                   </ProtectedRoute>
                 }
               >
-                {/* Dashboard */}
-                <Route path="/dashboard" element={<DashboardPage />} />
-                <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                  {/* Dashboard */}
+                <Route 
+                  path="/dashboard" 
+                  element={
+                    <ProtectedRoute requiredRoles={['admin', 'doctor', 'secretary']}>
+                      <DashboardPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route path="/" element={<RoleBasedRedirect />} />
 
                 {/* Appointments */}
                 <Route

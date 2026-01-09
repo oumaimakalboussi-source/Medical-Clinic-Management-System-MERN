@@ -1,6 +1,34 @@
 import Prescription from '../models/Prescription.js';
 import { asyncHandler, getPaginationParams, getSortOptions } from '../utils/helpers.js';
 
+// Defensive formatter to avoid runtime errors when optional refs are missing
+const formatPrescription = (presc) => {
+  const consultationId = presc?.consultationId?._id || null;
+  const patientId = presc?.patientId?._id || null;
+  const doctorId = presc?.doctorId?._id || null;
+
+  const patientName = presc?.patientId
+    ? `${presc.patientId.prenom ?? ''} ${presc.patientId.nom ?? ''}`.trim() || 'Unknown'
+    : 'Unknown';
+
+  const doctorName = presc?.doctorId
+    ? `${presc.doctorId.prenom ?? ''} ${presc.doctorId.nom ?? ''}`.trim() || 'Unknown'
+    : 'Unknown';
+
+  return {
+    id: presc?._id,
+    consultationId,
+    patientId,
+    patientName,
+    doctorId,
+    doctorName,
+    dateCreated: presc?.dateCreated || null,
+    medications: presc?.medications || [],
+    notes: presc?.notes || '',
+    status: presc?.status || 'draft',
+  };
+};
+
 /**
  * Prescription Controller
  * Handles prescriptions with multiple medications
@@ -28,18 +56,7 @@ export const getAllPrescriptions = asyncHandler(async (req, res) => {
   ]);
 
   // Format response to match frontend expectations
-  const formattedPrescriptions = prescriptions.map((presc) => ({
-    id: presc._id,
-    consultationId: presc.consultationId._id,
-    patientId: presc.patientId._id,
-    patientName: `${presc.patientId.prenom} ${presc.patientId.nom}`,
-    doctorId: presc.doctorId._id,
-    doctorName: `${presc.doctorId.prenom} ${presc.doctorId.nom}`,
-    dateCreated: presc.dateCreated,
-    medications: presc.medications,
-    notes: presc.notes,
-    status: presc.status,
-  }));
+  const formattedPrescriptions = prescriptions.map(formatPrescription);
 
   res.status(200).json({
     success: true,
@@ -68,18 +85,7 @@ export const getPrescriptionById = asyncHandler(async (req, res) => {
     });
   }
 
-  const formatted = {
-    id: prescription._id,
-    consultationId: prescription.consultationId._id,
-    patientId: prescription.patientId._id,
-    patientName: `${prescription.patientId.prenom} ${prescription.patientId.nom}`,
-    doctorId: prescription.doctorId._id,
-    doctorName: `${prescription.doctorId.prenom} ${prescription.doctorId.nom}`,
-    dateCreated: prescription.dateCreated,
-    medications: prescription.medications,
-    notes: prescription.notes,
-    status: prescription.status,
-  };
+  const formatted = formatPrescription(prescription);
 
   res.status(200).json({
     success: true,
@@ -114,18 +120,7 @@ export const createPrescription = asyncHandler(async (req, res) => {
   await prescription.populate('consultationId');
   await prescription.populate('medications.medicationId', 'name composition');
 
-  const formatted = {
-    id: prescription._id,
-    consultationId: prescription.consultationId._id,
-    patientId: prescription.patientId._id,
-    patientName: `${prescription.patientId.prenom} ${prescription.patientId.nom}`,
-    doctorId: prescription.doctorId._id,
-    doctorName: `${prescription.doctorId.prenom} ${prescription.doctorId.nom}`,
-    dateCreated: prescription.dateCreated,
-    medications: prescription.medications,
-    notes: prescription.notes,
-    status: prescription.status,
-  };
+  const formatted = formatPrescription(prescription);
 
   res.status(201).json({
     success: true,
@@ -158,18 +153,7 @@ export const updatePrescription = asyncHandler(async (req, res) => {
     });
   }
 
-  const formatted = {
-    id: prescription._id,
-    consultationId: prescription.consultationId._id,
-    patientId: prescription.patientId._id,
-    patientName: `${prescription.patientId.prenom} ${prescription.patientId.nom}`,
-    doctorId: prescription.doctorId._id,
-    doctorName: `${prescription.doctorId.prenom} ${prescription.doctorId.nom}`,
-    dateCreated: prescription.dateCreated,
-    medications: prescription.medications,
-    notes: prescription.notes,
-    status: prescription.status,
-  };
+  const formatted = formatPrescription(prescription);
 
   res.status(200).json({
     success: true,
